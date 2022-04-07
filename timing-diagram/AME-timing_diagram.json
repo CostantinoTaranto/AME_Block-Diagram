@@ -1,0 +1,46 @@
+{signal: [
+  {name: 'clk', 			wave: 'P.....|...'},
+  {name: 'VALID',			wave: 'x10.'},
+  {name: 'sixPar',			wave: 'x10.'},
+  [ 'First Pel Position',
+   {name: 'Cur(Rep,Block)_x',		wave: 'x2x',	data: ['{0,0}']},
+   {name: 'Cur(Rep,Block)_y',		wave: 'x2x',	data: ['{0,0}']},
+   {name: 'x0',						wave: 'x.2x',	data: ['0']},
+   {name: 'term_col',				wave: 'x0x'},
+   {name: 'y0',						wave: 'x.2x',	data: ['0']},
+   {name: 'term_row',				wave: 'x0x'},  
+   {name: 'x0_d2',					wave: 'x...2x',	data: ['0']},
+   {name: 'y0_d2',					wave: 'x...2x',	data: ['0']},
+  ],
+  [ 'MV_r calculation',
+    {name: 'RF_Addr',		wave: 'x2x',		data: ['0']},
+    {name: 'MV0_in',		wave: 'x2x|=.x',	data: ['{28,-4}']},
+    {name: 'MV1_in',		wave: 'x2x|=.x',	data: ['{28,-4}']},
+    {name: 'MV0_RF',		wave: 'xx2x|=.x',	data: ['{28,-4}']},
+    {name: 'MV1_RF',		wave: 'xx2x|=.x',	data: ['{28,-4}']},
+    {name: 'MVO-MV1', 		wave: 'xxx2x'	,	data: ['{0,0}']},
+    {name: '(a,b)_(1,2)',	wave: 'xxxx2x',		data: ['0']},
+    {name: 'sixPar_d3',		wave: 'x...1x'},
+    {name: '(x0,y0)*(a,b)',	wave: 'x....2x',	data: ['0']},
+    {name: 'MVr_ex_(h,v)',	wave: 'x.....2x',	data: ['{28,-4}']},
+    /*MV_r(h,v) e' sempre lo stesso per un singolo blocco, cambia solo quando cambiano
+    x0 e y0, oppure ovviamente se cambiano i CPMVs*/
+    {name: 'MV_r(h,v)',		wave: 'x......2x',	data: ['{2,0}']}
+  ],
+  [ 'Memory Acecess',
+   {name: 'x',	wave: 'x......2',	data:['0']},
+   {name: 'y',	wave: 'x......2',	data:['0']},
+   {},
+   {},
+   {},
+  ]
+  
+  //Insert space: {},
+ ],
+ //Size configuration
+ config: {hscale: 1 }
+}
+  
+  /*Assumo che la mia memoria sia in grado di tirare fuori 4 pixel per ciascuno dei due frame (Cur e Ref)
+  in un ciclo di clock, in questo modo in 4 cicli di clock sono in grado di calcolare la SAD di un
+  representative*/
