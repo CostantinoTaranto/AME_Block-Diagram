@@ -1,44 +1,97 @@
 {signal: [
-  {name: 'clk', 			wave: 'P.....|...'},
-  {name: 'VALID',			wave: 'x10.'},
-  {name: 'sixPar',			wave: 'x10.'},
+  {name: 'clk', 			wave: 'P........................'},
+  //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
+  //e il "DONE" del costruttore 
+  {name: 'VALID',			wave: 'x10..................10'},
+  {name: 'sixPar',			wave: 'x0.....................'},
   [ 'First Pel Position',
-   {name: 'Cur(Rep,Block)_x',		wave: 'x2x',	data: ['{0,0}']},
-   {name: 'Cur(Rep,Block)_y',		wave: 'x2x',	data: ['{0,0}']},
-   {name: 'x0',						wave: 'x.2x',	data: ['0']},
-   {name: 'term_col',				wave: 'x0x'},
-   {name: 'y0',						wave: 'x.2x',	data: ['0']},
-   {name: 'term_row',				wave: 'x0x'},  
-   {name: 'x0_d2',					wave: 'x...2x',	data: ['0']},
-   {name: 'y0_d2',					wave: 'x...2x',	data: ['0']},
+   /*Per la nomenclatura dei blocchi e dei rappresentanti, vedi il quaderno bianco*/
+   {name: 'CE_Rep_x(sync)', 		wave: 'x0....10..10..10..10'},
+   {name: 'CE_CurBlock_x(sync)',	wave:'0...................'},
+   {name: 'RST_CurBlock_x(sync)',	wave:'0.................10'},
+   {name: 'Cur(Block,Rep)_x',		wave: 'x.2.....2...2...2...2....',	data: ['{0,0}','{0,1}','{0,0}','{0,1}','{0,0}']},
+   {name: 'CE_Rep_y(sync)', 		wave: 'x0........10......10'},
+   {name: 'CE_CurBlock_y(sync)',	wave:'0...................'},
+   {name: 'RST_CurBlock_y(sync)',	wave:'0.................10'},
+   {name: 'Cur(Block,Rep)_y',		wave: 'x.2.....2...2...2...2......',	data: ['{0,0}','{0,0}','{0,1}','{0,1}','{0,0}']},
+   {name: 'x0',						wave: 'x..2.....2...2...2...2',	data: ['0','12','0','12','0']},
+   //Signals "last_block_x" and "last_block_y" tell the Control Unit that
+   //the current block is the last one, so that the CU let the 4 representative to be scanned
+   //and then terminate
+   {name: 'last_block_x',			wave: 'x01.................x.1'},
+   {name: 'y0',						wave: 'x..2.....2...2...2...2',	data: ['0','0','12','12','0',]},
+   {name: 'last_block_y',			wave: 'x01.................x.1'},
   ],
   [ 'MV_r calculation',
-    {name: 'RF_Addr',		wave: 'x2x',		data: ['0']},
-    {name: 'MV0_in',		wave: 'x2x|=.x',	data: ['{28,-4}']},
-    {name: 'MV1_in',		wave: 'x2x|=.x',	data: ['{28,-4}']},
-    {name: 'MV0_RF',		wave: 'xx2x|=.x',	data: ['{28,-4}']},
-    {name: 'MV1_RF',		wave: 'xx2x|=.x',	data: ['{28,-4}']},
-    {name: 'MVO-MV1', 		wave: 'xxx2x'	,	data: ['{0,0}']},
-    {name: '(a,b)_(1,2)',	wave: 'xxxx2x',		data: ['0']},
-    {name: 'sixPar_d3',		wave: 'x...1x'},
-    {name: '(x0,y0)*(a,b)',	wave: 'x....2x',	data: ['0']},
-    {name: 'MVr_ex_(h,v)',	wave: 'x.....2x',	data: ['{28,-4}']},
+    /*In questo RF, sia le letture che le scritture avvengono in maniera sincrona, questo ci permette 
+    di regolare l'indirizzo di lettura e di scrittura in anticipo e leggere sempre un dato corretto.
+    Per esempio, vedi il colpo di clock successivo a quello in cui si alza il valid per la prima volta. Posso spostarmi sull'indirizzo
+    "1" continuando sia a leggere il dato all'indirizzo "0" e sia tenermi pronto per scrivere un eventuale nuovo MV_in*/
+    {name: 'RF_Addr',		wave: '2.2.......................',		data: ['0','1']},
+   //The following values, until 'sixpar_d3', DON'T CHANGE until
+   //the candidate CPMVs change
+    {name: 'MV0_in',		wave: 'x2...................2....',	data: ['{28,-4}','{37,-6}']},
+    {name: 'MV1_in',		wave: 'x2...................2....',	data: ['{28,-4}','{23,12}']},
+    {name: 'MV0_RF',		wave: 'xx22..................2',	data: ['{28,-4}','{28,-4}','{37,-6}']},
+    {name: 'MV1_RF',		wave: 'xx22..................2',	data: ['{28,-4}','{28,-4}','{23,12}']},
+    {name: 'MV1-MV0', 		wave: 'xxx22..................2'	,	data: ['{0,0}','{0,0}','{-14,18}']},
+    /*Il segnale di LE_ab abilita il registro in cui vengono scritti i coefficienti (a,b)_(1,2).
+    Inizialemente, si alza per un solo ciclo di clock per permettere di scrivere i coefficienti per
+    il primo candidato, poi si abbassa e si rialza di nuovo quando tali coefficienti non servono piu'. Si abbassa
+    di nuovo quando vengono trascritti i coefficienti del secondo candidato.*/
+    {name: 'LE_ab',			wave: 'x..10..............1....'},
+    /*La parte in giallo indica semplicemente che in quell'intevallo di tempo non ci importa di quale valore abbiano
+    i coefficienti perche' non servono piu' e i coefficienti del nuovo candidato non sono ancora pronti*/
+    {name: '(a,b)_(1,2)',	wave: 'xxxx2...............3....2.......',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}']},
+    {name: 'sixPar_d3',		wave: 'x...0..........................'},
+   //...Until here
+    {name: '(x0,y0)*(a,b)',	wave: 'x....2...2...2...2...3....2',	data: ['0','0','0','0',,'0']},
+   {name: 'MVr_ex_(h,v)',	wave: 'x.....2...2...2...2...3....2...',	data: ['{28,-4}','{28,-4}','{28,-4}','{28,-4}',,'{37,-6}']},
     /*MV_r(h,v) e' sempre lo stesso per un singolo blocco, cambia solo quando cambiano
     x0 e y0, oppure ovviamente se cambiano i CPMVs*/
-    {name: 'MV_r(h,v)',		wave: 'x......2x',	data: ['{2,0}']}
+   {name: 'MV_r(h,v)',		wave: 'x......2...2...2...2...3....2...',	data: ['{2,0}','{2,0}','{2,0}','{2,0}',,'{2,0}']}
   ],
-  [ 'Memory Acecess',
-   {name: 'x',	wave: 'x......2',	data:['0']},
-   {name: 'y',	wave: 'x......2',	data:['0']},
-   {},
-   {},
-   {},
+  [ 'Memory Access',
+   {name: 'x',				wave: 'x......2...2...2...2...3....2...',	data:['0','12','0','12',,'0']},
+   {name: 'y',				wave: 'x......22222222222222223....2222',	data:['0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3',,'0','1','2','3']},
+   {name: 'RAddr_CurCU_x',	wave: 'x........2...2...2...2...3....2...',	data:['0','12','0','12',,'0']},
+   {name: 'RAddr_CurCU_y',	wave: 'x........22222222222222223....2222',	data:['0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3',,'0','1','2','3']},
+   {name: 'RAddr_RefCU_x',	wave: 'x........2...2...2...2...3....2...',	data:['2','14','2','14',,'2']},
+   {name: 'RAddr_RefCU_y',	wave: 'x........22222222222222223....2222',	data:['0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3',,'0','1','2','3']},
+  ],
+  [ 'Memory OUT',
+   {name: 'CurPel(0)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['85','88','90','92']},
+   {name: 'RefPel(0)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['88','88','88','88']},
+   {name: 'CurPel(1)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['92','94','93','91']},
+   {name: 'RefPel(1)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['88','88','88','86']},
+   {name: 'CurPel(2)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['92','90','87','85']},
+   {name: 'RefPel(2)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['87','86','85','85']},
+   {name: 'CurPel(3)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['83','83','85','85']},
+   {name: 'RefPel(3)',	wave:'x.........2222333344445555xxxxx2222333344445555',	data:['85','86','86','86']},
+  ],
+
+  [ 'SAD Calculation',
+   {name: 'SAD_tmp_RST(async)', wave:'x.0..........................1.....0'},
+   {name: 'SAD_tmp',	wave:'x............222222223222422252....2222',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47']},
+   {name: 'CurRowSAD',	wave:'x............2222222222222222xxxxx2222',	data:['14','13','10','10','84','84','89','90']},
+   {name: 'CurSAD',		wave:'x.............2222222322242225x....2222',	data:['14','27','37','47','131','215','304','394',,,,'883',,,,'1308',,,,'47']},
+   {name: 'Comp_EN',	wave:'x.0..........................10'},
+   {name: 'SAD_min',	wave:'x.2...........................2', data: ['262143','1308']},
+   {name: 'Cur_Cand',	wave:'x.2..........................3....2', data: ['0',,'1']},
+   {name: 'Best_Cand',	wave:'x.2...........................2', data: ['0','0']},
+   {},{},{},
+  
   ]
   
   //Insert space: {},
  ],
  //Size configuration
- config: {hscale: 1 }
+ config: {hscale: 1 },
+ head:{
+   text:'AME example 26',
+   tick:-1,
+   every:1
+ },
 }
   
   /*Assumo che la mia memoria sia in grado di tirare fuori 4 pixel per ciascuno dei due frame (Cur e Ref)
