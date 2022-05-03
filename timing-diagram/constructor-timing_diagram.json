@@ -1,0 +1,63 @@
+{signal: [
+  {name: 'clk', 			wave: 'P......................................................'},
+  {name: 'START',			wave: 'x10..............................'},
+  {name: 'RST',				wave: '1.0.....................................'},
+  
+  {name: 'MV triplet', 		wave: 'x.222222222222x',	data: ['000','100','200','010','110','210','001','101','201','011','111','211']},
+  /*Legenda
+  nLW: n-th lowest
+  LOW: the lowest*/
+  {name: 'MV1-MV0',			wave: 'x.....222222222222x',	data: ['000','100','200','INVA','110','210','001','3LW','2LW','011','111','LOW']},
+  {name: 'h,w',				wave: 'x.2...........x',	data: ['{64,64}d']},//d: base dieci
+  ['HoW',
+   /*Nota: RSH_LE controlla entrambi i registri*/
+   {name: 'RSH_LE',			wave:'x.10........'},
+   /*Nota: cmd_SH_en e' abilitato dalla CU per far in modo che cmd_RSH indichi per quante votle
+   shiftare.*/
+   {name: 'cmd_SH_en',	wave:'x..1.0' },
+   {name: 'SH_en',		wave:'x..1.0'},
+   {name: 'shift_amt',	wave:'x..222......', 	data: ['10b','01b','00b']},	//b: binary
+   {name: 'shift_dir',	wave:'x....1......'	}
+  
+  ],
+  ['LR_SH2',
+   /*Nota: l'enable aggiuntivo L_SH2_LE serve a poter abilitare lo shifter corretto in base alle necessita',
+   questo permette di risparmiare potenza perche' lo shifter che non ci serve non si abilita*/
+   {name: 'L_SH2_LE',			wave:'x.....1....'},
+   /*Nota: cmd_SH_en e' abilitato dalla CU per far in modo che cmd_RSH indichi per quante votle
+   shiftare.*/
+     {name: 'SH_en',		wave:'x.....1..'},
+     {name: 'MV1-MV0_d1',	wave:'x......222222222222x',	data: ['000','100','200','INVA','110','210','001','101','201','011','111','211']},
+     {name: 'SH_en2',		wave:'x......1..'},
+   	 {name: 'MV1-MV0_d2',	wave:'x.......222222222222x',	data: ['000','100','200','INVA','110','210','001','101','201','011','111','211']},
+     {name: 'shift_dir_d3',	wave:'x.......1.....'},
+     {name: 'diff_mult_(v,h)',	wave:'x........222222222222x',	data: ['000','100','200','INVA','110','210','001','101','201','011','111','211']},    
+    ],
+   {name:'D_(h,v)**2',	wave:'x...........222222222222x',	data: ['000','100','200','INVA','110','210','001','3LW','2LW','011','111','211']},
+   {name:'D_Cur',		wave:'x............222222222222x', data:['1stmin','100','200',['tspan', {'font-size':'9'}, '268435455'],'110','210','001','3LW','2LW','011','111','LOW']},
+   {name:'D_D',			wave:'x.............222222222222x', data:['1stmin','100','200',['tspan', {'font-size':'9'}, '268435455'],'110','210','001','3LW','2LW','011','111','LOW']},
+   {name:'D_comp',		wave:'x.............2......22..2x', data:['1stmin','3LW','2LW','LOW']},
+   {name:'comp',		wave:'x............10.....1.0.1x'},
+   {name:'comp_d',		wave:'x.............10.....1.0.1x'},
+   {name:'inva_triplet',wave:'x.0..10.......x'},
+   {name:'D_sel',		wave:'x...........0..10.......x'},
+   {name:'LE',			wave:'x.............10.....1.0.1x'},
+   ['Result',
+   	  	{name:'D_min',		wave:'x..............2......22..2x', data:['1stmin','3LW','2LW','LOW']},
+    	{name:'Constr. MV',	wave:'x..............2......22..2x', data:['000','101','201','211']},
+    	{name:'DONE',		wave:'x.0.......................1x'},
+   ],
+
+  
+],
+ //Size configuration
+ config: {hscale: 1 },
+ head:{
+   text:'Construction Example',
+   tick:-1,
+   every:1
+ }
+}
+
+
+  
