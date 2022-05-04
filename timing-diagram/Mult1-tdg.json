@@ -1,0 +1,26 @@
+{signal: [
+  {name: 'clk', 		wave: 'P.........................'},
+  {name: 'mult_in',		wave: 'x22223333x',	data:['x1x2','x3x2','x1x4','x3x4','y1y2','y3y2','y1y4','y3y4']},
+  /*is signed infroma il moltiplicatore se e quale dei due operandi deve essere trattato come numero signed*/
+  {name: 'is_signed',	wave:'x22222222x', data:['00','10','01','11']},
+  {name: 'mult_out', 	wave: 'x.22223333x',	data:['x1x2','x3x2','x1x4','x3x4','y1y2','y3y2','y1y4','y3y4']},
+  {name: 'SH_en',		wave: 'x.101010101'},
+  {name: 'SUM_rst',		wave: 'x.0..10..10'},
+  {name: 'sum',			wave:'x.222223333x',	data:['0','12','12+32','12+32+14','0','12','12+32','12+32+14','0']},
+  {name: 'result_LE',	wave:'x0...10..10.1'},
+  {name: 'result',		wave:'x.....2...3..x',data:['x(12+32+14+34)','y(12+32+14+34)']},
+
+  //Insert space: {},
+ ],
+ //Size configuration
+ config: {hscale: 3 },
+ head:{
+   text:'MULT1 Timing Diagram',
+   tick:-1,
+   every:1
+ },
+}
+  
+  /*Assumo che la mia memoria sia in grado di tirare fuori 4 pixel per ciascuno dei due frame (Cur e Ref)
+  in un ciclo di clock, in questo modo in 4 cicli di clock sono in grado di calcolare la SAD di un
+  representative*/

@@ -2,25 +2,25 @@
   {name: 'clk', 			wave: 'P......................................................'},
   //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
   //e il "DONE" del costruttore 
-  {name: 'VALID',			wave: 'x10..................10............'},
+  {name: 'VALID',			wave: 'x10..................x...10............'},
   {name: 'sixPar',			wave: 'x0......................................'},
   [ 'First Pel Position',
    /*Per la nomenclatura dei blocchi e dei rappresentanti, vedi il quaderno bianco*/
-   {name: 'CE_Rep_x(sync)', 		wave: 'x0...10..10..10..10......10..10..10..10..'},
+   {name: 'CE_Rep_x(sync)', 		wave: 'x0...10..10..10..10..........10..10..10..10..'},
    {name: 'CE_CurBlock_x(sync)',	wave:'0.......................................'},
-   {name: 'RST_CurBlock_x(sync)',	wave:'0................10..................10'},
-   {name: 'Cur(Block,Rep)_x',		wave: 'x.2...2...2...2...3...2...2...2...2...2',	data: ['{0,0}','{0,1}','{0,0}','{0,1}','{0,0}','{0,0}','{0,1}','{0,0}','{0,1}']},
-   {name: 'CE_Rep_y(sync)', 		wave: 'x0.......10......10..........10......10'},
+   {name: 'RST_CurBlock_x(sync)',	wave:'0................10......................10'},
+   {name: 'Cur(Block,Rep)_x',		wave: 'x.2...2...2...2...3.......2...2...2...2...2',	data: ['{0,0}','{0,1}','{0,0}','{0,1}','{0,0}','{0,0}','{0,1}','{0,0}','{0,1}']},
+   {name: 'CE_Rep_y(sync)', 		wave: 'x0.......10......10..............10......10'},
    {name: 'CE_CurBlock_y(sync)',	wave:'0.......................................'},
-   {name: 'RST_CurBlock_y(sync)',	wave:'0................10..................10'},
-   {name: 'Cur(Block,Rep)_y',		wave: 'x.2...2...2...2...3...2...2...2...2...2',	data: ['{0,0}','{0,0}','{0,1}','{0,1}','{0,0}','{0,0}','{0,0}','{0,1}','{0,1}']},
-   {name: 'x0',						wave: 'x..2...2...2...2...3...2...2...2...2...2',	data: ['0','12','0','12','0','0','12','0','12']},
+   {name: 'RST_CurBlock_y(sync)',	wave:'0................10......................10'},
+   {name: 'Cur(Block,Rep)_y',		wave: 'x.2...2...2...2...3.......2...2...2...2...2',	data: ['{0,0}','{0,0}','{0,1}','{0,1}','{0,0}','{0,0}','{0,0}','{0,1}','{0,1}']},
+   {name: 'x0',						wave: 'x..2...2...2...2...3.......2...2...2...2...2',	data: ['0','12','0','12','0','0','12','0','12']},
    //Signals "last_block_x" and "last_block_y" tell the Control Unit that
    //the current block is the last one, so that the CU let the 4 representative to be scanned
    //and then terminate
-   {name: 'last_block_x',			wave: 'x0.1...............x...1...............x'},
-   {name: 'y0',						wave: 'x..2...2...2...2...3...2...2...2...2...2',	data: ['0','0','12','12','0','0','0','12','12']},
-   {name: 'last_block_y',			wave: 'x0.1...............x...1...............x'},
+   {name: 'last_block_x',			wave: 'x0.1...............x.......1...............x'},
+   {name: 'y0',						wave: 'x..2...2...2...2...3.......2...2...2...2...2',	data: ['0','0','12','12','0','0','0','12','12']},
+   {name: 'last_block_y',			wave: 'x0.1...............x.......1...............x'},
   ],
   [ 'MV_r calculation',
     /*In questo RF, sia le letture che le scritture avvengono in maniera sincrona, questo ci permette 
@@ -30,20 +30,21 @@
     {name: 'RF_Addr',		wave: '2.2....................................',		data: ['0','1']},
    //The following values, until 'sixpar_d3', DON'T CHANGE until
    //the candidate CPMVs change
-    {name: 'MV0_in',		wave: 'x2...................2...............',	data: ['{28,-4}','{37,-6}']},
-    {name: 'MV1_in',		wave: 'x2...................2...............',	data: ['{28,-4}','{23,12}']},
-    {name: 'RF_WE',			wave: '1.....................0.............................1..'},
-    {name: 'MV0_RF',		wave: 'xx22..................2............................2...',	data: ['{28,-4}','{28,-4}','{37,-6}','Best:{37,-6}']},
-    {name: 'MV1_RF',		wave: 'xx22..................2............................2...',	data: ['{28,-4}','{28,-4}','{23,12}','Best:{23,12}']},
-    {name: 'MV1-MV0', 		wave: 'xxx22..................2...............2'	,	data: ['{0,0}','{0,0}','{-14,18}']},
+    {name: 'MV0_in',		wave: 'x2.......................2...............',	data: ['{28,-4}','{37,-6}']},
+    {name: 'MV1_in',		wave: 'x2.......................2...............',	data: ['{28,-4}','{23,12}']},
+    {name: 'RF_WE',			wave: '1.........................0.............................1..'},
+    {name: 'MV0_RF',		wave: 'xx22......................2............................2...',	data: ['{28,-4}','{28,-4}','{37,-6}','Best:{37,-6}']},
+    {name: 'MV1_RF',		wave: 'xx22......................2............................2...',	data: ['{28,-4}','{28,-4}','{23,12}','Best:{23,12}']},
+    {name: 'MV1-MV0', 		wave: 'xxx22......................2...............2'	,	data: ['{0,0}','{0,0}','{-14,18}']},
+    {name: 'R_SH2_out',		wave: 'x....2.......................2'},
     /*Il segnale di LE_ab abilita il registro in cui vengono scritti i coefficienti (a,b)_(1,2).
     Inizialemente, si alza per un solo ciclo di clock per permettere di scrivere i coefficienti per
     il primo candidato, poi si abbassa e si rialza di nuovo quando tali coefficienti non servono piu'. Si abbassa
     di nuovo quando vengono trascritti i coefficienti del secondo candidato.*/
-    {name: 'LE_ab',			wave: 'x..10..............1....0............................'},
+    {name: 'LE_ab',			wave: 'x....10..............1........0............................'},
     /*La parte in giallo indica semplicemente che in quell'intevallo di tempo non ci importa di quale valore abbiano
     i coefficienti perche' non servono piu' e i coefficienti del nuovo candidato non sono ancora pronti*/
-   {name: '{a1,a2};{b1,b2}',	wave: 'xxxx2...............3...2...............2',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}']},
+   {name: '{a1,a2};{b1,b2}',	wave: 'xxxx..2...............3.......2...............2',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}']},
    //...Until here
    {name: '{x0*a};{y0*b}',	wave: 'x....2...2...2...2...3...2...2...2...2...2',	data: ['0','0','0','0',,'0',['tspan', {'font-size':'16'}, '{13.5,-10.5};{0,0}'],'{0,0};{-10.5,-13.5}',['tspan', {'font-size':'13'}, '{13.5,-10.5};{-10.5,-13.5}']]},
   {name: 'MVr_ex_(h,v)',	wave: 'x.....2...2...2...2...3...2...2...2...2...2',	data: ['{28,-4}','{28,-4}','{28,-4}','{28,-4}',,'{37,-6}','{26.5,7.5}','{23.5,-16.5}','{13,-3}']},
