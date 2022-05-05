@@ -22,7 +22,9 @@
   ],
   ['LR_SH2',
    /*Nota: l'enable aggiuntivo L_SH2_LE serve a poter abilitare lo shifter corretto in base alle necessita',
-   questo permette di risparmiare potenza perche' lo shifter che non ci serve non si abilita*/
+   questo permette di risparmiare potenza perche' lo shifter che non ci serve non si abilita.
+   NOTA: Questo giochetto mi fa perdere un colpo di clock, ma per il momento non mi inporta dato che siamo 
+   abbastanza tranquilli sulla frequenza di clock*/
    {name: 'L_SH2_LE',			wave:'x.....1....'},
    /*Nota: cmd_SH_en e' abilitato dalla CU per far in modo che cmd_RSH indichi per quante votle
    shiftare.*/
