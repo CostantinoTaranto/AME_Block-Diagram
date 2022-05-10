@@ -1,5 +1,6 @@
 {signal: [
   {name: 'clk', 			wave: 'P.....................................................................'},
+  //{name: 'READY',	wave:'x1.0............'},
   //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
   //e il "DONE" del costruttore 
   {name: 'VALID',			wave: 'x10.......................10............'},
@@ -76,6 +77,8 @@
    {name: 'SAD_tmp',	wave:'x...................222222223222422252........22222223222422252..',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47',,,,'394',,,,'598',,,,'847','0']},
    {name: 'CurRowSAD',	wave:'x...................2222222222222222xxx......2222222222222222x...',	data:['14','13','10','10','84','84','89','90']},
    {name: 'CurSAD',		wave:'x....................2222222322242225x........2222222322242225x..',	data:['14','27','37','47','131','215','304','394',,,,'883',,,,'1308',,,,'47',,,,'394',,,,'598',,,,'847']},
+   /*Nota che Comp_EN si alza un numero di cicli di clock fissato dopo aver elaborato l'ultimo blocco 16x16. Un modo per generarlo usando la CU potrebbe
+   essere di usare un contatore pilotato dalla CU che dopo tot cicli di clock alza un flag che è proprio comp_EN*/
    {name: 'Comp_EN',	wave:'x.0.................................10.......................10..'},
    {name: 'SAD_min',	wave:'x.2..................................2........................22.', data: ['262143','1308','847','262143']},
    {name: 'Cur_Cand',	wave:'x.2...........................................2...............2...', data: ['0','1','0']},
