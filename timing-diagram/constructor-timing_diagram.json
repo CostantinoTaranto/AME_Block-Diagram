@@ -1,7 +1,9 @@
 {signal: [
   {name: 'clk', 			wave: 'P......................................................'},
+  {name: 'READY',			wave: '1..0'},
   {name: 'START',			wave: 'x10..............................'},
-  {name: 'RST',				wave: '1.0.....................................'},
+  //{name: 'RST',				wave: '1..0.....................................'},
+  {name: 'MV_in',			wave: 'x222222222222x',	data: ['000','100','200','010','110','210','001','101','201','011','111','211']},
   
   {name: 'MV triplet', 		wave: 'x.222222222222x',	data: ['000','100','200','010','110','210','001','101','201','011','111','211']},
   /*Legenda
@@ -11,7 +13,7 @@
   {name: 'h,w',				wave: 'x.2...........x',	data: ['{64,64}d']},//d: base dieci
   ['HoW',
    /*Nota: RSH_LE controlla entrambi i registri*/
-   {name: 'RSH_LE',			wave:'x.10........'},
+   {name: 'RSH_LE',			wave:'1..0........'},
    /*Nota: cmd_SH_en e' abilitato dalla CU per far in modo che cmd_RSH indichi per quante votle
    shiftare.*/
    {name: 'cmd_SH_en',	wave:'x..1.0' },
@@ -47,7 +49,7 @@
    ['Result',
    	  	{name:'D_min',		wave:'x..............2......22..2x', data:['1stmin','3LW','2LW','LOW']},
     	{name:'Constr. MV',	wave:'x..............2......22..2x', data:['000','101','201','211']},
-    	{name:'DONE',		wave:'x.0.......................1x'},
+    	{name:'DONE',		wave:'x..0.......................1x'},
    ],
 
   
