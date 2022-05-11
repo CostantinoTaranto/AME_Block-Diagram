@@ -1,6 +1,6 @@
 {signal: [
   {name: 'clk', 			wave: 'P.....................................................................'},
-  //{name: 'READY',	wave:'x1.0............'},
+  {name: 'READY',	wave:'1.01.......................0'},
   //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
   //e il "DONE" del costruttore 
   {name: 'VALID',			wave: 'x10.......................10............'},
@@ -28,7 +28,7 @@
     di regolare l'indirizzo di lettura e di scrittura in anticipo e leggere sempre un dato corretto.
     Per esempio, vedi il colpo di clock successivo a quello in cui si alza il valid per la prima volta. Posso spostarmi sull'indirizzo
     "1" continuando sia a leggere il dato all'indirizzo "0" e sia tenermi pronto per scrivere un eventuale nuovo MV_in*/
-    {name: 'RF_Addr',		wave: '2.2....................................',		data: ['0','1']},
+    {name: 'RF_Addr',		wave: '2..2....................................',		data: ['0','1']},
    //The following values, until 'sixpar_d3', DON'T CHANGE until
    //the candidate CPMVs change
     {name: 'MV0_in',		wave: 'x2........................2...............',	data: ['{28,-4}','{37,-6}']},
