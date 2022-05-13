@@ -1,9 +1,14 @@
 {signal: [
   {name: 'clk', 			wave: 'P.....................................................................'},
-  {name: 'READY',	wave:'1.01.......................0'},
+  {name: 'READY [RF_WE]',	wave:'1.01.......................0....................................1'},
   //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
   //e il "DONE" del costruttore 
   {name: 'VALID',			wave: 'x10.......................10............'},
+  /*Questo segnale viene mosso dalla Control Unit abilitando il CE di un contatore  e indica quanti candidati sono sati correntemente analizzati.
+  Questo valore finisce in un comparatore con il numero di candidati utilizzati e genera il flag last_cand che serve alla CU per capire quando deve terminare l'esecuzione.*/
+  {name: 'Cand_Count',			wave: '2...........................2...', data:[0,1]},
+  {name: 'last_cand', 			wave: '0...........................1...'},
+  {name: 'Constructed',		wave: 'x1...............................................................x'},
   {name: 'sixPar',			wave: 'x0......................................'},
   [ 'First Pel Position',
    /*Per la nomenclatura dei blocchi e dei rappresentanti, vedi il quaderno bianco*/
@@ -33,9 +38,10 @@
    //the candidate CPMVs change
     {name: 'MV0_in',		wave: 'x2........................2...............',	data: ['{28,-4}','{37,-6}']},
     {name: 'MV1_in',		wave: 'x2........................2...............',	data: ['{28,-4}','{23,12}']},
-    {name: 'RF_WE',			wave: '1..........................0.............................1..'},
-    {name: 'MV0_RF',		wave: 'xx22.......................2............................2...',	data: ['{28,-4}','{28,-4}','{37,-6}','Best:{37,-6}']},
-    {name: 'MV1_RF',		wave: 'xx22.......................2............................2...',	data: ['{28,-4}','{28,-4}','{23,12}','Best:{23,12}']},
+   /*Io il RF_WE lo toglierei semplicemente perchè perchè non so se lo metterò, potrebbe essere */ 
+   //{name: 'RF_WE',			wave: '1..........................0.............................1..'},
+    {name: 'MV0_RF',		wave: 'xx22.......................2...................................2...',	data: ['{28,-4}','{28,-4}','{37,-6}','Best:{37,-6}']},
+    {name: 'MV1_RF',		wave: 'xx22.......................2...................................2...',	data: ['{28,-4}','{28,-4}','{23,12}','Best:{23,12}']},
     {name: 'MV1-MV0', 		wave: 'xxx22.......................2...............2'	,	data: ['{0,0}','{0,0}','{-14,18}']},
     {name: 'R_SH2_out',		wave: 'x....2........................2...'},
     /*Il segnale di LE_ab abilita il registro in cui vengono scritti i coefficienti (a,b)_(1,2).
@@ -73,15 +79,18 @@
   ],
 
   [ 'SAD Calculation',
-   {name: 'SAD_tmp_RST(async)', wave:'x.0.................................1.........0...............1..'},
-   {name: 'SAD_tmp',	wave:'x...................222222223222422252........22222223222422252..',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47',,,,'394',,,,'598',,,,'847','0']},
+   {name: 'SAD_tmp_RST(async)', wave:'x.0.................................1.........0..............1...'},
+   {name: 'SAD_tmp',	wave:'x...................222222223222422252........22222223222422252..',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47',,,,'394',,,,'598',,,,'0','0']},
    {name: 'CurRowSAD',	wave:'x...................2222222222222222xxx......2222222222222222x...',	data:['14','13','10','10','84','84','89','90']},
    {name: 'CurSAD',		wave:'x....................2222222322242225x........2222222322242225x..',	data:['14','27','37','47','131','215','304','394',,,,'883',,,,'1308',,,,'47',,,,'394',,,,'598',,,,'847']},
    /*Nota che Comp_EN si alza un numero di cicli di clock fissato dopo aver elaborato l'ultimo blocco 16x16. Un modo per generarlo usando la CU potrebbe
    essere di usare un contatore pilotato dalla CU che dopo tot cicli di clock alza un flag che è proprio comp_EN*/
    {name: 'Comp_EN',	wave:'x.0.................................10.......................10..'},
+   {name: 'Found_best',	wave:'x.0.................................10.......................10'},
    {name: 'SAD_min',	wave:'x.2..................................2........................22.', data: ['262143','1308','847','262143']},
-   {name: 'Cur_Cand',	wave:'x.2...........................................2...............2...', data: ['0','1','0']},
+   /*Questo segnale viene abilitato da Comp_EN e serve a fare in modo che, quando faccio il confronto tra i valori di SAD, so qual'è il candidato a cui
+   appartiene la SAD corrente*/
+   {name: 'CurCand',	wave:'x.2..................................2........................2...', data: ['0','1','0']},
    {name: 'Best_Cand',	wave:'x.2.......................................2...................22..', data: ['0','0','1','0']},
    {name: 'OUT_LE',		wave: 'x.0............................................................10'},
   ],
