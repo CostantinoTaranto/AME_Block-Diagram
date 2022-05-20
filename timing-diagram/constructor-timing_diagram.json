@@ -1,5 +1,6 @@
 {signal: [
   {name: 'clk', 			wave: 'P......................................................'},
+  {name: 'Present_State',	wave: '22.222....................2x', data:['ON_RST','IDLE','CON','WF_SH','STOP_SHIFT','COMPL']},
   {name: 'READY',			wave: '1..0'},
   {name: 'START',			wave: 'x10..............................'},
   //{name: 'RST',				wave: '1..0.....................................'},
@@ -49,13 +50,13 @@
    ['Result',
    	  	{name:'D_min',		wave:'x..............2......22..2x', data:['1stmin','3LW','2LW','LOW']},
     	{name:'Constr. MV',	wave:'x..............2......22..2x', data:['000','101','201','211']},
-    	{name:'DONE',		wave:'x..0.......................1x'},
+    	{name:'DONE',		wave:'x..0......................1x'},
    ],
 
   
 ],
  //Size configuration
- config: {hscale: 1 },
+ config: {hscale: 2 },
  head:{
    text:'Construction Example',
    tick:-1,

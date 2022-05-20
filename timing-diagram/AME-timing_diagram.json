@@ -1,24 +1,31 @@
 {signal: [
   {name: 'clk', 			wave: 'P.....................................................................'},
-  {name: 'READY [RF_WE]',	wave:'1.01.......................0....................................1'},
+  {name: 'READY [RF_WE]',	wave:'1.01.......................0.....................................1'},
   //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
   //e il "DONE" del costruttore 
   {name: 'VALID',			wave: 'x10.......................10............'},
+  {name: 'Present_State', 	wave:'2222222222222222222.........2222222222222222..................2222',	data: ['ON_R', 'IDLE','IDLE','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_C1','SC_W','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_LC','W_FC','R_BC','W_BC','EXTI','IDLE']},
+  {name: 'Next_State',		wave:'222222222222222222.........2222222222222222..................2222',	data: ['IDLE', 'IDLE','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_C1','SC_W','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_LC','W_FC','R_BC','W_BC','EXTI','IDLE']},
+  {name: 'Count18_EN', 		wave: '0.........................................1...................0'},
+  {name: 'Count18',			wave: '2..........................................22222222222222222222..',	data: ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','0']},
+  {name: 'Count18_OUT',		wave: '0...........................................................10...'},
+  /*Questo flag segnala alla CU se il secondo candidato è già pronto o meno. Viene asserito dal blocco "READY_CU" nel caso in cui il secondo candidato
+  fosse pronto prima dell'elaborazione del primo*/
+  {name: 'Second_Ready',		wave:'0..........................1'},
   /*Questo segnale viene mosso dalla Control Unit abilitando il CE di un contatore  e indica quanti candidati sono sati correntemente analizzati.
   Questo valore finisce in un comparatore con il numero di candidati utilizzati e genera il flag last_cand che serve alla CU per capire quando deve terminare l'esecuzione.*/
   {name: 'Cand_Count',			wave: '2...........................2...', data:[0,1]},
-  {name: 'last_cand', 			wave: '0...........................1...'},
-  {name: 'Constructed',		wave: 'x1...............................................................x'},
+  {name: 'last_cand', 			wave: '0...........................1.................'},
   {name: 'sixPar',			wave: 'x0......................................'},
   [ 'First Pel Position',
    /*Per la nomenclatura dei blocchi e dei rappresentanti, vedi il quaderno bianco*/
-   {name: 'CE_Rep_x(sync)', 		wave: 'x0...10..10..10..10...........10..10..10..10..'},
+   {name: 'CE_Rep_x(sync)', 		wave: '0....10..10..10..10...........10..10..10..10..'},
    {name: 'CE_CurBlock_x(sync)',	wave:'0.......................................'},
-   {name: 'RST_CurBlock_x(sync)',	wave:'0................10.......................10'},
+   {name: 'RST_CurBlock_x(sync)',	wave:'1..0.............10.......................10'},
    {name: 'Cur(Block,Rep)_x',		wave: 'x.2...2...2...2...3........2...2...2...2...2',	data: ['{0,0}','{0,1}','{0,0}','{0,1}','{0,0}','{0,0}','{0,1}','{0,0}','{0,1}']},
-   {name: 'CE_Rep_y(sync)', 		wave: 'x0.......10......10...............10......10'},
+   {name: 'CE_Rep_y(sync)', 		wave: '0........10......10...............10......10'},
    {name: 'CE_CurBlock_y(sync)',	wave:'0.......................................'},
-   {name: 'RST_CurBlock_y(sync)',	wave:'0................10.......................10'},
+   {name: 'RST_CurBlock_y(sync)',	wave:'1..0.............10.......................10'},
    {name: 'Cur(Block,Rep)_y',		wave: 'x.2...2...2...2...3........2...2...2...2...2',	data: ['{0,0}','{0,0}','{0,1}','{0,1}','{0,0}','{0,0}','{0,0}','{0,1}','{0,1}']},
    {name: 'x0',						wave: 'x..2...2...2...2...3........2...2...2...2...2',	data: ['0','12','0','12','0','0','12','0','12']},
    //Signals "last_block_x" and "last_block_y" tell the Control Unit that
@@ -48,7 +55,7 @@
     Inizialemente, si alza per un solo ciclo di clock per permettere di scrivere i coefficienti per
     il primo candidato, poi si abbassa e si rialza di nuovo quando tali coefficienti non servono piu'. Si abbassa
     di nuovo quando vengono trascritti i coefficienti del secondo candidato.*/
-    {name: 'LE_ab',			wave: 'x....10..............1.........0............................'},
+    {name: 'LE_ab',			wave: 'x....1.0.............1..........0...........................'},
     /*La parte in giallo indica semplicemente che in quell'intevallo di tempo non ci importa di quale valore abbiano
     i coefficienti perche' non servono piu' e i coefficienti del nuovo candidato non sono ancora pronti*/
    {name: '{a1,a2};{b1,b2}',	wave: 'xxxx..2...............3........2...............2',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}']},
@@ -79,7 +86,7 @@
   ],
 
   [ 'SAD Calculation',
-   {name: 'SAD_tmp_RST(async)', wave:'x.0.................................1.........0..............1...'},
+   {name: 'SAD_tmp_RST(async)', wave:'x.0.................10..............1.........0..............1...'},
    {name: 'SAD_tmp',	wave:'x...................222222223222422252........22222223222422252..',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47',,,,'394',,,,'598',,,,'0','0']},
    {name: 'CurRowSAD',	wave:'x...................2222222222222222xxx......2222222222222222x...',	data:['14','13','10','10','84','84','89','90']},
    {name: 'CurSAD',		wave:'x....................2222222322242225x........2222222322242225x..',	data:['14','27','37','47','131','215','304','394',,,,'883',,,,'1308',,,,'47',,,,'394',,,,'598',,,,'847']},
@@ -88,8 +95,9 @@
    {name: 'Comp_EN',	wave:'x.0.................................10.......................10..'},
    {name: 'Found_best',	wave:'x.0.................................10.......................10'},
    {name: 'SAD_min',	wave:'x.2..................................2........................22.', data: ['262143','1308','847','262143']},
-   /*Questo segnale viene abilitato da Comp_EN e serve a fare in modo che, quando faccio il confronto tra i valori di SAD, so qual'è il candidato a cui
-   appartiene la SAD corrente*/
+   /*Questo segnale (CurCand) viene abilitato da Comp_EN e serve a fare in modo che, quando faccio il confronto tra i valori di SAD, so qual'è il candidato a cui
+   appartiene la SAD corrente. È un segnale diverso rispetto a "Cand_Count" perché quest'ultimo viene prodotto molto in anticipo, e questa cosa è
+   fondametnale alla Control Unit per capire quando terminare l'esecuzione (vedi la descrizione di Cand_Count)*/
    {name: 'CurCand',	wave:'x.2..................................2........................2...', data: ['0','1','0']},
    {name: 'Best_Cand',	wave:'x.2.......................................2...................22..', data: ['0','0','1','0']},
    {name: 'OUT_LE',		wave: 'x.0............................................................10'},
