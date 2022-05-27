@@ -1,6 +1,6 @@
 {signal: [
   {name: 'clk', 			wave: 'P......................................................'},
-  {name: 'Present_State',	wave: '22.222....................2x', data:['ON_RST','IDLE','CON','WF_SH','STOP_SHIFT','COMPL']},
+  {name: 'Present_State',	wave: '22.222.......2...........22x', data:['ON_RST','IDLE','CONSTR','WF_SH','STOP_SHIFT','COMPARE','STP_COMP','COMPL']},
   {name: 'READY',			wave: '1..0'},
   {name: 'START',			wave: 'x10..............................'},
   //{name: 'RST',				wave: '1..0.....................................'},
@@ -42,6 +42,7 @@
    {name:'D_Cur',		wave:'x............222222222222x', data:['1stmin','100','200',['tspan', {'font-size':'9'}, '268435455'],'110','210','001','3LW','2LW','011','111','LOW']},
    {name:'D_D',			wave:'x.............222222222222x', data:['1stmin','100','200',['tspan', {'font-size':'9'}, '268435455'],'110','210','001','3LW','2LW','011','111','LOW']},
    {name:'D_comp',		wave:'x.............2......22..2x', data:['1stmin','3LW','2LW','LOW']},
+   {name: 'comp_EN',	wave:'x............1..........0.'},
    {name:'comp',		wave:'x............10.....1.0.1x'},
    {name:'comp_d',		wave:'x.............10.....1.0.1x'},
    {name:'inva_triplet',wave:'x.0..10.......x'},
