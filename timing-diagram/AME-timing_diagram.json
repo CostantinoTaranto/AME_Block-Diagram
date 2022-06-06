@@ -60,6 +60,10 @@
     i coefficienti perche' non servono piu' e i coefficienti del nuovo candidato non sono ancora pronti*/
    {name: '{a1,a2};{b1,b2}',	wave: 'xxxx..2...............3........2...............2',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}']},
    //...Until here
+   //"ADD3_MVin_LE" serve a cariare il motion vector nel registro che fornisce uno dei tre ingressi di ADD3.
+   //E' generato della control unit e fa in modo che al momento giusto ci sia il MV0 giusto in pasto ad ADD3.
+   {name: 'ADD3_MVin_LE', wave:'x1.0......................1.0'},
+   {name: 'ADD3_MVin', wave:'x..2.......................2........................x', data: ['{28,-4}','{37,-6}'] },
    {name: '{x0*a};{y0*b}',	wave: 'x..........2...2...2...2...3........2...2...2...2...2',	data: ['0','0','0','0',,'0',['tspan', {'font-size':'16'}, '{13.5,-10.5};{0,0}'],'{0,0};{-10.5,-13.5}',['tspan', {'font-size':'13'}, '{13.5,-10.5};{-10.5,-13.5}']]},
   {name: 'MVr_ex_(h,v)',	wave: 'x............2...2...2...2...3........2...2...2...2...2',	data: ['{28,-4}','{28,-4}','{28,-4}','{28,-4}',,'{37,-6}','{26.5,7.5}','{23.5,-16.5}','{13,-3}']},
     /*MV_r(h,v) e' sempre lo stesso per un singolo blocco, cambia solo quando cambiano
@@ -86,7 +90,12 @@
   ],
 
   [ 'SAD Calculation',
-   {name: 'SAD_tmp_RST(async)', wave:'x.0.................10..............1.........0..............1...'},
+   /*Il reset "SAD_tmp_RST" ho scelto di farlo sincrono perche' il reset asincrono ha il seguente problema. Quando la CU alza il reset asincrono,
+   per quel ciclo di clock il dato il uscita dal registro diventa zero. Al ciclo di clock successivo, la CU abbassa il reset asincrono, quindi mi
+   aspetto che per quel ciclo il dato che vedo in uscita dal registro sia la copia del dato in ingresso. Peccato che non e' cosi' perche' la CU
+   ha un certo ritardo nell'abbassare il reset e quando il clock batte per scrivere il dato la CU ancora non lo ha abbassato. In poche parole
+   un reset asincrono generato da una CU tiene il dato a zero per due cicli di clock! Col reset sincrono questo problema non esiste.*/
+   {name: 'SAD_tmp_RST(sync)', wave:'x0.................10..............1.........0..............1....'},
    {name: 'SAD_tmp',	wave:'x...................222222223222422252........22222223222422252..',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47',,,,'394',,,,'598',,,,'0','0']},
    {name: 'CurRowSAD',	wave:'x...................2222222222222222xxx......2222222222222222x...',	data:['14','13','10','10','84','84','89','90']},
    {name: 'CurSAD',		wave:'x....................2222222322242225x........2222222322242225x..',	data:['14','27','37','47','131','215','304','394',,,,'883',,,,'1308',,,,'47',,,,'394',,,,'598',,,,'847']},
@@ -99,7 +108,7 @@
    appartiene la SAD corrente. È un segnale diverso rispetto a "Cand_Count" perché quest'ultimo viene prodotto molto in anticipo, e questa cosa è
    fondametnale alla Control Unit per capire quando terminare l'esecuzione (vedi la descrizione di Cand_Count)*/
    {name: 'CurCand',	wave:'x.2..................................2........................2...', data: ['0','1','0']},
-   {name: 'Best_Cand',	wave:'x.2.......................................2...................22..', data: ['0','0','1','0']},
+   {name: 'Best_Cand',	wave:'x.2..................................2........................22..', data: ['0','0','1','0']},
    {name: 'OUT_LE',		wave: 'x.0............................................................10'},
   ],
    {name: 'CPMV0',		wave: 'x.2.............................................................2.', data: ['0','{37,-6}']},
