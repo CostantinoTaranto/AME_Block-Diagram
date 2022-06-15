@@ -14,8 +14,8 @@
   {name: 'Second_Ready',		wave:'0..........................1'},
   /*Questo segnale viene mosso dalla Control Unit abilitando il CE di un contatore  e indica quanti candidati sono sati correntemente analizzati.
   Questo valore finisce in un comparatore con il numero di candidati utilizzati e genera il flag last_cand che serve alla CU per capire quando deve terminare l'esecuzione.*/
-  {name: 'Cand_Count',			wave: '2...........................2...', data:[0,1]},
-  {name: 'last_cand', 			wave: '0...........................1.................'},
+  {name: 'Cand_Count',			wave: '2.................2...', data:[0,1]},
+  {name: 'last_cand', 			wave: '0.................1....................'},
   {name: 'sixPar',			wave: 'x0......................................'},
   [ 'First Pel Position',
    /*Per la nomenclatura dei blocchi e dei rappresentanti, vedi il quaderno bianco*/
@@ -59,12 +59,15 @@
     /*La parte in giallo indica semplicemente che in quell'intevallo di tempo non ci importa di quale valore abbiano
     i coefficienti perche' non servono piu' e i coefficienti del nuovo candidato non sono ancora pronti*/
    {name: '{a1,a2};{b1,b2}',	wave: 'xxxx..2...............3........2...............2',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}']},
+   {name: 'MULT1_VALID', 		wave: 'x.....1...............0........1...............0'},
    //...Until here
    //"ADD3_MVin_LE" serve a cariare il motion vector nel registro che fornisce uno dei tre ingressi di ADD3.
    //E' generato della control unit e fa in modo che al momento giusto ci sia il MV0 giusto in pasto ad ADD3.
    {name: 'ADD3_MVin_LE', wave:'x1.0......................1.0'},
    {name: 'ADD3_MVin', wave:'x..2.......................2........................x', data: ['{28,-4}','{37,-6}'] },
    {name: '{x0*a};{y0*b}',	wave: 'x..........2...2...2...2...3........2...2...2...2...2',	data: ['0','0','0','0',,'0',['tspan', {'font-size':'16'}, '{13.5,-10.5};{0,0}'],'{0,0};{-10.5,-13.5}',['tspan', {'font-size':'13'}, '{13.5,-10.5};{-10.5,-13.5}']]},
+  /*Nota che ADD3_VALID non e' altri che MULT1_VALID ritardato di 5 colpi*/
+  {name: 'ADD3_VALID', wave: 'x..........1...............0........1...............0'},
   {name: 'MVr_ex_(h,v)',	wave: 'x............2...2...2...2...3........2...2...2...2...2',	data: ['{28,-4}','{28,-4}','{28,-4}','{28,-4}',,'{37,-6}','{26.5,7.5}','{23.5,-16.5}','{13,-3}']},
     /*MV_r(h,v) e' sempre lo stesso per un singolo blocco, cambia solo quando cambiano
     x0 e y0, oppure ovviamente se cambiano i CPMVs*/
