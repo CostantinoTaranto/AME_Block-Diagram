@@ -1,0 +1,34 @@
+{signal: [
+  {name: 'clk', 			wave: 'P.........'},
+  {name: 'extim_READY',	wave:'1.010.....'},
+  //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
+  //e il "DONE" del costruttore 
+  {name: 'VALID',			wave: '01010.....'},
+ 
+    /*In questo RF, sia le letture che le scritture avvengono in maniera sincrona, questo ci permette 
+    di regolare l'indirizzo di lettura e di scrittura in anticipo e leggere sempre un dato corretto.
+    Per esempio, vedi il colpo di clock successivo a quello in cui si alza il valid per la prima volta. Posso spostarmi sull'indirizzo
+    "1" continuando sia a leggere il dato all'indirizzo "0" e sia tenermi pronto per scrivere un eventuale nuovo MV_in*/
+    {name: 'RF_Addr',		wave: '2..2......',		data: ['0','1']},
+   //The following values, until 'sixpar_d3', DON'T CHANGE until
+   //the candidate CPMVs change
+    {name: 'MV(0,1,2)_in_VTM',				wave: 'x2.2.x....',	data: ['Candidate_1','Candidate_2']},
+    {name: 'MV(0,1,2)_in_Constructor',		wave: 'x........x',	data: []},
+   /*Io il RF_WE lo toglierei semplicemente perchè perchè non so se lo metterò, potrebbe essere */ 
+   //{name: 'RF_WE',			wave: '1..........................0.............................1..'},
+ 
+   
+  //Insert space: {},
+  ],
+ //Size configuration
+ config: {hscale: 2 },
+ head:{
+   text:'Input TDG with NO Constructed candidates',
+   tick:-1,
+   every:1
+ },
+}
+  
+  /*Assumo che la mia memoria sia in grado di tirare fuori 4 pixel per ciascuno dei due frame (Cur e Ref)
+  in un ciclo di clock, in questo modo in 4 cicli di clock sono in grado di calcolare la SAD di un
+  representative*/

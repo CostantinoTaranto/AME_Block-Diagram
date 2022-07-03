@@ -1,6 +1,8 @@
 {signal: [
-  {name: 'clk', 		wave: 'P.........................'},
-  {name: 'VALID',		wave:  'x1.......0result_LE'},
+  {name: 'clk', 		wave:  'P.........................'},
+  {name: 'VALID',		wave:  'x1.......0'},
+  {name: 'op1',			wave:  'x2...3...x', data: ['x[3,1]','y[3,1]']  },
+  {name: 'op2',			wave:  'x2...3...x', data: ['x[4,2]','y[4,2]']  },
   {name: 'mult_in',		wave: 'x22223333x',	data:['x2x1','x2x3','x4x1','x4x3','y2y1','y2y3','y4y1','y4y3']},
   {name: 'MSBs',		wave: 'x22222222x',	data:['00','01','10','11','00','01','10','11']},
   /*is signed infroma il moltiplicatore se e quale dei due operandi deve essere trattato come numero signed*/
@@ -15,7 +17,7 @@
   //Insert space: {},
  ],
  //Size configuration
- config: {hscale: 3 },
+ config: {hscale: 2 },
  head:{
    text:'MULT1 Timing Diagram',
    tick:-1,

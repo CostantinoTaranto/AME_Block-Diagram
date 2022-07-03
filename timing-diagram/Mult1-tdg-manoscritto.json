@@ -1,0 +1,31 @@
+{signal: [
+  ['MULT1 in',
+   {name: 'clk', 		wave:  'P..........'},
+  {name: 'VALID',		wave:  'x1...0.....'},
+  {name: 'op1',			wave:  'x2...x....x', data: ['o1[1,0]','y[3,1]']  },
+  {name: 'op2',			wave:  'x2...x....x', data: ['o2[1,0]','y[4,2]']  },],
+  {name: 'mult_in',		wave: 'x2222x....x',	data:['o2[0]o1[0]','o2[0]o1[1]','o2[1]o1[0]','o2[1]o1[1]']},
+  //{name: 'MSBs',		wave: 'x22222222x',	data:['00','01','10','11','00','01','10','11']},
+  /*is signed infroma il moltiplicatore se e quale dei due operandi deve essere trattato come numero signed*/
+  {name: 'is_signed',	wave:'x22222....x', data:['00','01','10','11','00','01','10','11']},
+  {name: 'mult_out', 	wave: 'x.22222...x',	data:['o2[0]o1[0]','o2[0]o1[1]','o2[1]o1[0]','o2[1]o1[1]','0']},
+  {name: 'SH_en',		wave: 'x01010.....'},
+  {name: 'product_int_RST',		wave: 'x..0.10....'},//Synchronous reset
+  {name: 'sum',			wave:'x..2222...x',	data:['00','00+01','00+01+10','0','12','12+32','12+32+14','0']},
+  {name: 'result_LE',	wave:'x.0..10....'},
+  {name: 'result (MULT1 out)',		wave:'x.....2...x',data:['(00+01+10+11)=o1[1,0]*o2[1,0]','y(12+32+14+34)']},
+
+  //Insert space: {},
+ ],
+ //Size configuration
+ config: {hscale: 2 },
+ head:{
+   text:'MULT1 Timing Diagram',
+   tick:-1,
+   every:1
+ },
+}
+  
+  /*Assumo che la mia memoria sia in grado di tirare fuori 4 pixel per ciascuno dei due frame (Cur e Ref)
+  in un ciclo di clock, in questo modo in 4 cicli di clock sono in grado di calcolare la SAD di un
+  representative*/

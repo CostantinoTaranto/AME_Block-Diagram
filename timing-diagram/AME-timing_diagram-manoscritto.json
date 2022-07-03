@@ -1,0 +1,134 @@
+{signal: [
+  {name: 'clk', 			wave: 'P.................................................................'},
+  {name: 'READY [RF_WE]',	wave:'1.01.......................0.....................................1'},
+  //NOTA: Il "VALID" qui sotto e' una "or" tra il "Valid" fornito dal VTM (quello per i candidati non costruiti)
+  //e il "DONE" del costruttore 
+  {name: 'VALID',			wave: 'x10.......................10......................................'},
+  {name: 'Present_State', 	wave:'2222222222222222222.........2222222222222222..................2222',	data: ['ON_R','IDLE','IDLE','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_C1','SC_W','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_LC','W_FC','R_BC','W_BC','EXTI','IDLE']},
+  {name: 'Next_State',		wave:'222222222222222222.........2222222222222222..................22222',	data: ['IDLE','IDLE','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_C1','SC_W','S_W2','S_W3','SREP','T_W1','T_W2','T_W3','TREP','F_W1','F_W2','F_W3','FREP','N_W1','N_W2','N_W3','T_LC','W_FC','R_BC','W_BC','EXTI','IDLE','IDLE']},
+  {name: 'Count18_EN', 		wave: '0.........................................1...................0...'},
+  {name: 'Count18',			wave: '2..........................................22222222222222222222...',	data: ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','0']},
+  {name: 'Count18_OUT',		wave: '0...........................................................10....'},
+  /*Questo flag segnala alla CU se il secondo candidato è già pronto o meno. Viene asserito dal blocco "READY_CU" nel caso in cui il secondo candidato
+  fosse pronto prima dell'elaborazione del primo*/
+  {name: 'Second_Ready',	wave:'0..........................10.....................................'},
+  /*Questo segnale viene mosso dalla Control Unit abilitando il CE di un contatore  e indica quanti candidati sono sati correntemente analizzati.
+  Questo valore finisce in un comparatore con il numero di candidati utilizzati e genera il flag last_cand che serve alla CU per capire quando deve terminare l'esecuzione.*/
+  {name: 'Cand_Count',			wave: '2.................2..............................................2', data:[0,1,0]},
+  {name: 'last_cand', 			wave: '0.................1..............................................0'},
+  {name: 'sixPar',				wave: 'x0................................................................'},
+  [ 'First Pel Position',
+   /*Per la nomenclatura dei blocchi e dei rappresentanti, vedi il quaderno bianco*/
+   {name: 'CE_Rep_x(sync)', 		wave: '0....10..10..10..10...........10..10..10..10......................'},
+   {name: 'CE_CurBlock_x(sync)',	wave: '0.................................................................'},
+   {name: 'RST_CurBlock_x(sync)',	wave: '1..0.............10.......................10......................'},
+   {name: 'Cur(Block,Rep)_x',		wave: 'x.2...2...2...2...3........2...2...2...2...2......................',	data: ['{0,0}','{0,1}','{0,0}','{0,1}','{0,0}','{0,0}','{0,1}','{0,0}','{0,1}','{0,0}']},
+   {name: 'CE_Rep_y(sync)', 		wave: '0........10......10...............10......10......................'},
+   {name: 'CE_CurBlock_y(sync)',	wave: '0.................................................................'},
+   {name: 'RST_CurBlock_y(sync)',	wave: '1..0.............10.......................10......................'},
+   {name: 'Cur(Block,Rep)_y',		wave: 'x.2...2...2...2...3........2...2...2...2...2......................',	data: ['{0,0}','{0,0}','{0,1}','{0,1}','{0,0}','{0,0}','{0,0}','{0,1}','{0,1}','{0,0}']},
+   {name: 'x0',						wave: 'x..2...2...2...2...3........2...2...2...2...2.....................',	data: ['0','12','0','12','0','0','12','0','12','0']},
+   //Signals "last_block_x" and "last_block_y" tell the Control Unit that
+   //the current block is the last one, so that the CU let the 4 representative to be scanned
+   //and then terminate
+   {name: 'last_block_x',			wave: 'x0.1...............x........1...............0.....................'},
+   {name: 'y0',						wave: 'x..2...2...2...2...3........2...2...2...2...2.....................',	data: ['0','0','12','12','0','0','0','12','12','0']},
+   {name: 'last_block_y',			wave: 'x0.1...............x........1...............0.....................'},
+  ],
+  [ 'MV_r calculation',
+    /*In questo RF, sia le letture che le scritture avvengono in maniera sincrona, questo ci permette 
+    di regolare l'indirizzo di lettura e di scrittura in anticipo e leggere sempre un dato corretto.
+    Per esempio, vedi il colpo di clock successivo a quello in cui si alza il valid per la prima volta. Posso spostarmi sull'indirizzo
+    "1" continuando sia a leggere il dato all'indirizzo "0" e sia tenermi pronto per scrivere un eventuale nuovo MV_in*/
+    {name: 'RF_Addr',		wave: '2..2.............................................................2',		data: ['0','1','0']},
+   //The following values, until 'sixpar_d3', DON'T CHANGE until
+   //the candidate CPMVs change
+    {name: 'MV0_in',		wave: 'x2........................2.2.....................................',	data: ['{28,-4}','{37,-6}','{0,0}']},
+    {name: 'MV1_in',		wave: 'x2........................2.2.....................................',	data: ['{28,-4}','{23,12}','{0,0}']},
+   /*Io il RF_WE lo toglierei semplicemente perchè perchè non so se lo metterò, potrebbe essere */ 
+   //{name: 'RF_WE',			wave: '1..........................0.............................1..'},
+    {name: 'MV0_RF',		wave: 'xx22.......................2...................................2.2',	data: ['{28,-4}','{28,-4}','{37,-6}','Best:{37,-6}','{0,0}']},
+    {name: 'MV1_RF',		wave: 'xx22.......................2...................................2.2',	data: ['{28,-4}','{28,-4}','{23,12}','Best:{23,12}','{0,0}']},
+    {name: 'MV1-MV0', 		wave: 'xxx22.......................2...............2....................2',	data: ['{0,0}','{0,0}','{-14,18}','{0,0}','{0,0}']},
+    //{name: 'R_SH2_out',		wave: 'x....2........................2...'},
+    /*Il segnale di LE_ab abilita il registro in cui vengono scritti i coefficienti (a,b)_(1,2).
+    Inizialemente, si alza per un solo ciclo di clock per permettere di scrivere i coefficienti per
+    il primo candidato, poi si abbassa e si rialza di nuovo quando tali coefficienti non servono piu'. Si abbassa
+    di nuovo quando vengono trascritti i coefficienti del secondo candidato.*/
+    {name: 'LE_ab',			wave: 'x....1.0.............1..........0.................................'},
+    /*La parte in giallo indica semplicemente che in quell'intevallo di tempo non ci importa di quale valore abbiano
+    i coefficienti perche' non servono piu' e i coefficienti del nuovo candidato non sono ancora pronti*/
+   {name: '{a1,a2};{b1,b2}',	wave: 'xxxx..2...............3........2...............2.................2',		data: ['0',,'{1.125,-0.875},{-0.875,-1.125}','{0,0}','{0,0}']},
+   {name: 'MULT1_VALID', 		wave: 'x.....1...............0........1...............0..................'},
+   //...Until here
+   //"ADD3_MVin_LE" serve a cariare il motion vector nel registro che fornisce uno dei tre ingressi di ADD3.
+   //E' generato della control unit e fa in modo che al momento giusto ci sia il MV0 giusto in pasto ad ADD3.
+   {name: 'ADD3_MVin_LE', wave:'x1.0......................1.0.....................................'},
+   //{name: 'ADD3_MVin', wave:'x..2.......................2........................x', data: ['{28,-4}','{37,-6}'] },
+   {name: '{x0*a};{y0*b}',	wave: 'x..........2...2...2...2...3........2...2...2...2...2............2',	data: ['0','0','0','0',,'0',['tspan', {'font-size':'16'}, '{13.5,-10.5};{0,0}'],'{0,0};{-10.5,-13.5}',['tspan', {'font-size':'13'}, '{13.5,-10.5};{-10.5,-13.5}'],'0','0']},
+  /*Nota che ADD3_VALID non e' altri che MULT1_VALID ritardato di 5 colpi*/
+  {name: 'ADD3_VALID', 		wave: 'x..........1...............0........1...............0.............'},
+  {name: 'MVr_ex_(h,v)',	wave: 'x............2...2...2...2...3........2...2...2...2...2..........2',	data: ['{28,-4}','{28,-4}','{28,-4}','{28,-4}',,'{37,-6}','{26.5,7.5}','{23.5,-16.5}','{13,-3}','0','0']},
+    /*MV_r(h,v) e' sempre lo stesso per un singolo blocco, cambia solo quando cambiano
+    x0 e y0, oppure ovviamente se cambiano i CPMVs*/
+  {name: 'MV_r(h,v)',		wave: 'x.............2...2...2...2...3........2...2...2...2...2.........2',	data: ['{2,0}','{2,0}','{2,0}','{2,0}',,'{2,0}','{2,0}','{1,-1}','{1,0}','0','0']}
+  ],
+  [ 'Memory Access',
+   {name: 'x',				wave: 'x.............2...2...2...2...3........2...2...2...2...2.........2',	data:['0','12','0','12',,'0','12','0','12','0','0']},
+   {name: 'y',				wave: 'x.............22222222222222223........22222222222222222.........2',	data:['0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3',,'0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3','0','0']},
+   {name: 'RAddr_CurCU_x',	wave: 'x..............2...2...2...2...3........2...2...2...2...2........2',	data:['0','12','0','12',,'0','12','0','12','0','0']},
+   {name: 'RAddr_CurCU_y',	wave: 'x..............22222222222222223........22222222222222222........2',	data:['0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3',,'0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3','0','0']},
+   {name: 'RAddr_RefCU_x',	wave: 'x..............2...2...2...2...3........2...2...2...2...2........2',	data:['2','14','2','14',,'2','14','1','13','0','0']},
+   {name: 'RAddr_RefCU_y',	wave: 'x..............22222222222222223........22222222222222222........2',	data:['0','1','2','3','0','1','2','3','0','1','2','3','0','1','2','3',,'0','1','2','3','0','1','2','3','-1','0','1','2','0','1','2','3','0','0']},
+  ],
+  [ 'Memory OUT',
+   {name: 'CurPel(0)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['85','88','90','92']},
+   {name: 'RefPel(0)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['88','88','88','88']},
+   {name: 'CurPel(1)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['92','94','93','91']},
+   {name: 'RefPel(1)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['88','88','88','86']},
+   {name: 'CurPel(2)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['92','90','87','85']},
+   {name: 'RefPel(2)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['87','86','85','85']},
+   {name: 'CurPel(3)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['83','83','85','85']},
+   {name: 'RefPel(3)',	wave:'x...............2222333344445555xxxx.....2222333344445555x........',	data:['85','86','86','86']},
+  ],
+
+  [ 'SAD Calculation',
+   /*Il reset "SAD_tmp_RST" ho scelto di farlo sincrono perche' il reset asincrono ha il seguente problema. Quando la CU alza il reset asincrono,
+   per quel ciclo di clock il dato il uscita dal registro diventa zero. Al ciclo di clock successivo, la CU abbassa il reset asincrono, quindi mi
+   aspetto che per quel ciclo il dato che vedo in uscita dal registro sia la copia del dato in ingresso. Peccato che non e' cosi' perche' la CU
+   ha un certo ritardo nell'abbassare il reset e quando il clock batte per scrivere il dato la CU ancora non lo ha abbassato. In poche parole
+   un reset asincrono generato da una CU tiene il dato a zero per due cicli di clock! Col reset sincrono questo problema non esiste.*/
+   {name: 'SAD_tmp_RST(sync)', wave:'x0.................10..............1.........0..............1.....'},
+   {name: 'SAD_tmp',	wave:'x...................222222223222422252........22222223222422252...',	data:['0','14','27','37','47','131','215','304','394',,,,'883',,,,'0','0',,,,'47',,,,'394',,,,'598',,,,'0','0']},
+   {name: 'CurRowSAD',	wave:'x...................2222222222222222xxx......2222222222222222x....',	data:['14','13','10','10','84','84','89','90']},
+   {name: 'CurSAD',		wave:'x....................2222222322242225x........2222222322242225x...',	data:['14','27','37','47','131','215','304','394',,,,'883',,,,'1308',,,,'47',,,,'394',,,,'598',,,,'847']},
+   /*Nota che Comp_EN si alza un numero di cicli di clock fissato dopo aver elaborato l'ultimo blocco 16x16. Un modo per generarlo usando la CU potrebbe
+   essere di usare un contatore pilotato dalla CU che dopo tot cicli di clock alza un flag che è proprio comp_EN*/
+   {name: 'Comp_EN',	wave:'x.0.................................10.......................10...'},
+   {name: 'Found_best',	wave:'x.0.................................10.......................10...'},
+   {name: 'SAD_min',	wave:'x.2..................................2........................22..', data: ['262143','1308','847','262143']},
+   /*Questo segnale (CurCand) viene abilitato da Comp_EN e serve a fare in modo che, quando faccio il confronto tra i valori di SAD, so qual'è il candidato a cui
+   appartiene la SAD corrente. È un segnale diverso rispetto a "Cand_Count" perché quest'ultimo viene prodotto molto in anticipo, e questa cosa è
+   fondametnale alla Control Unit per capire quando terminare l'esecuzione (vedi la descrizione di Cand_Count)*/
+   {name: 'CurCand',	wave:'x.2..................................2........................2...', data: ['0','1','0']},
+   {name: 'Best_Cand',	wave:'x.2..................................2........................22..', data: ['0','0','1','0']},
+   {name: 'OUT_LE',		wave: 'x.0............................................................10.'},
+  ],
+   {name: 'CPMV0',		wave: 'x.2.............................................................2.', data: ['0','{37,-6}']},
+   {name: 'CPMV1',		wave: 'x.2.............................................................2.', data: ['0','{23,12}']},
+   {name: 'DONE',		wave: 'x.0.............................................................10'},
+   
+  //Insert space: {},
+ ],
+ //Size configuration
+ config: {hscale: 1 },
+ head:{
+   text:'AME example 26',
+   tick:-1,
+   every:1
+ },
+}
+  
+  /*Assumo che la mia memoria sia in grado di tirare fuori 4 pixel per ciascuno dei due frame (Cur e Ref)
+  in un ciclo di clock, in questo modo in 4 cicli di clock sono in grado di calcolare la SAD di un
+  representative*/
